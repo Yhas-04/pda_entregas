@@ -277,10 +277,6 @@ function step(s){
 }
 function fire(t){
 
-  if(soft&&!can(t.s)){
-    say(`Soft: “${t.s}” passou sem efeito (sem transição em ${cur().st} com ${topOf()==='Z'?'só Z':topOf()} no topo).`);
-    return
-  }
   let ok=step(t.s);
   if(ok&&t.o)opened[t.o]=1;
   if(ok&&/^[a-d]1?$/.test(t.s))spawnChar(t);
