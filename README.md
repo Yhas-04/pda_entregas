@@ -110,4 +110,6 @@ Além dessas transições, que só ocorrem uma única vez, também é obrigatór
 - `assets/images/background.jpg`: imagem de fundo.
 - `assets/models/*.obj` e `*.mtl`: modelos 3D e materiais em texto.
 - `assets/data/squirrel_mesh.json`: geometria em JSON.
-- `assets/data/shadow_weights.json`: pesos de animação/sombra em JSON.
+- `assets/data/shadow_weights.json`: pesos de animação/sombra em JSON
+
+foi utilizado ia apenas para o desenvolvimento da interface, para o .jss não
