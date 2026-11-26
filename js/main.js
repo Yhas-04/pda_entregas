@@ -956,7 +956,6 @@ function drawOverlay(){
   ctx.textBaseline='middle';
   ctx.font='bold 20px sans-serif';
 
-  const t1=`${c.st} · ${NM[c.st]}`+(sym!=='—'?'   leu: '+sym:'')+(soft?'   · soft':''),
   w1=ctx.measureText(t1).width+24;
 
   ctx.fillStyle='rgba(24,18,12,.8)';
