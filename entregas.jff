@@ -46,326 +46,123 @@
 		</state>
 		<!--The list of transitions.-->
 		<transition>
-			<from>0</from>
-			<to>0</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>0</to>
-			<read>a1</read>
-			<pop>A</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>0</to>
-			<read>d</read>
-			<pop>W</pop>
-			<push>KD</push>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>0</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>1</from>
-			<to>1</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>1</from>
-			<to>1</to>
-			<read>a1</read>
-			<pop>A</pop>
+			<from>4</from>
+			<to>4</to>
+			<read>B</read>
+			<pop>B</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>1</from>
 			<to>1</to>
-			<read>c</read>
-			<pop>U</pop>
-			<push>C</push>
-		</transition>
-		<transition>
-			<from>1</from>
-			<to>1</to>
-			<read>c1</read>
+			<read>C</read>
 			<pop>C</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>1</from>
 			<to>1</to>
-			<read>d1</read>
+			<read>D</read>
 			<pop>D</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>B</read>
+			<pop>B</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>1</from>
 			<to>1</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>a1</read>
+			<read>A</read>
 			<pop>A</pop>
 			<push>M</push>
 		</transition>
 		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>d</read>
-			<pop>W</pop>
-			<push>KD</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>b</read>
-			<pop>T</pop>
-			<push>B</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>b1</read>
-			<pop>B</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>2</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>a1</read>
-			<pop>A</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>d</read>
-			<pop>W</pop>
-			<push>KD</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>b</read>
-			<pop>T</pop>
-			<push>B</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>b1</read>
-			<pop>B</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>3</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>a1</read>
+			<from>0</from>
+			<to>0</to>
+			<read>A</read>
 			<pop>A</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>4</from>
 			<to>4</to>
-			<read>b</read>
-			<pop>T</pop>
-			<push>B</push>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>b1</read>
-			<pop>B</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>c</read>
-			<pop>U</pop>
-			<push>C</push>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>c1</read>
+			<read>C</read>
 			<pop>C</pop>
 			<push>M</push>
 		</transition>
 		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>d1</read>
-			<pop>D</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>4</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>5</to>
-			<read>a</read>
-			<pop>V</pop>
-			<push>A</push>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>5</to>
-			<read>a1</read>
+			<from>2</from>
+			<to>2</to>
+			<read>A</read>
 			<pop>A</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>5</from>
 			<to>5</to>
-			<read>b</read>
-			<pop>T</pop>
-			<push>B</push>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>5</to>
-			<read>b1</read>
-			<pop>B</pop>
-			<push>M</push>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>5</to>
-			<read>c</read>
-			<pop>U</pop>
-			<push>C</push>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>5</to>
-			<read>c1</read>
+			<read>C</read>
 			<pop>C</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>5</from>
 			<to>5</to>
-			<read>d1</read>
+			<read>B</read>
+			<pop>B</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>A</read>
+			<pop>A</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>5</to>
+			<read>D</read>
+			<pop>D</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>A</read>
+			<pop>A</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>B</read>
+			<pop>B</pop>
+			<push>M</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>D</read>
 			<pop>D</pop>
 			<push>M</push>
 		</transition>
 		<transition>
 			<from>5</from>
 			<to>5</to>
-			<read>m</read>
-			<pop>M</pop>
-			<push/>
+			<read>A</read>
+			<pop>A</pop>
+			<push>M</push>
 		</transition>
 		<transition>
 			<from>0</from>
 			<to>1</to>
-			<read>po</read>
+			<read>G</read>
 			<pop>K</pop>
 			<push>U</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>4</to>
-			<read>po</read>
-			<pop>K</pop>
-			<push>U</push>
-		</transition>
-		<transition>
-			<from>3</from>
-			<to>5</to>
-			<read>po</read>
-			<pop>K</pop>
-			<push>U</push>
-		</transition>
-		<transition>
-			<from>0</from>
-			<to>2</to>
-			<read>pe1</read>
-			<pop>M</pop>
-			<push>T</push>
-		</transition>
-		<transition>
-			<from>1</from>
-			<to>4</to>
-			<read>pe1</read>
-			<pop>M</pop>
-			<push>T</push>
-		</transition>
-		<transition>
-			<from>2</from>
-			<to>3</to>
-			<read>pe2</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>4</from>
-			<to>5</to>
-			<read>pe2</read>
-			<pop>M</pop>
-			<push/>
-		</transition>
-		<transition>
-			<from>5</from>
-			<to>6</to>
-			<read/>
-			<pop>Z</pop>
-			<push>Z</push>
 		</transition>
 		<transition>
 			<from>7</from>
@@ -375,11 +172,214 @@
 			<push>VWZ</push>
 		</transition>
 		<transition>
+			<from>0</from>
+			<to>2</to>
+			<read>P</read>
+			<pop>M</pop>
+			<push>T</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>0</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>5</to>
+			<read>m</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>0</to>
+			<read>d</read>
+			<pop>W</pop>
+			<push>KD</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>d</read>
+			<pop>W</pop>
+			<push>KD</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>d</read>
+			<pop>W</pop>
+			<push>KD</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>6</to>
+			<read/>
+			<pop>Z</pop>
+			<push>Z</push>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>4</to>
+			<read>P</read>
+			<pop>M</pop>
+			<push>T</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>b</read>
+			<pop>T</pop>
+			<push>B</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>b</read>
+			<pop>T</pop>
+			<push>B</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>b</read>
+			<pop>T</pop>
+			<push>B</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>5</to>
+			<read>b</read>
+			<pop>T</pop>
+			<push>B</push>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>c</read>
+			<pop>U</pop>
+			<push>C</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>c</read>
+			<pop>U</pop>
+			<push>C</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>5</to>
+			<read>c</read>
+			<pop>U</pop>
+			<push>C</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>5</to>
+			<read>G</read>
+			<pop>K</pop>
+			<push>U</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>5</to>
+			<read>E</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>0</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>2</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>3</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>4</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>5</to>
+			<read>a</read>
+			<pop>V</pop>
+			<push>A</push>
+		</transition>
+		<transition>
 			<from>7</from>
 			<to>0</to>
 			<read/>
 			<pop>Z</pop>
 			<push>WVZ</push>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>3</to>
+			<read>E</read>
+			<pop>M</pop>
+			<push/>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>4</to>
+			<read>G</read>
+			<pop>K</pop>
+			<push>U</push>
 		</transition>
 	</automaton>
 </structure>

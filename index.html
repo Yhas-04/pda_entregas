@@ -8,9 +8,13 @@
 </main>
 <div class="bar">
  <button id="rst">↺ Reiniciar</button>
- <button id="mR" class="on" title="Segue o autômato à risca: transição inexistente rejeita a entrada">Modo rígido</button>
- <button id="mS" title="Passa por qualquer ponto; só os pontos com transição válida (brilhando) fazem efeito">Modo soft</button>
- <input id="inp" placeholder="a a1 pe1 b b1 pe2 d po c c1 m d1 m" autocomplete="off" spellcheck="false">
+ <button id="mR" class="on" title="Segue o autômato à risca: transição inexistente rejeita a entrada">Modo PDA</button>
+ <button id="mS" title="Passa por qualquer ponto; só os pontos com transição válida (brilhando) fazem efeito">Modo Livre</button>
+ <input id="inp" placeholder="a A P b B E d G c C m D m" autocomplete="off" spellcheck="false">
  <button id="run">▶ Inserir sequência</button>
+ <section class="stats-row" aria-live="polite" aria-label="Estatísticas de sequências aceitas">
+  <strong id="accepted-count">Carregando sequências aceitas…</strong>
+  <span id="accepted-list" class="accepted-list"></span>
+ </section>
 </div>
 <script src="./js/main.js" defer></script></body></html>

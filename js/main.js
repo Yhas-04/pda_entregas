@@ -5,17 +5,10 @@ const walk=(x,y)=>{
   const i=((y|0)>>2)*MW+((x|0)>>2);
   return(bits[i>>3]>>(7-(i&7)))&1
 };
-// A máscara representa somente o asfalto. A amostragem ao redor do
-// personagem evita que ele atravesse a borda e pise na grama.
-const onRoad=(x,y)=>{
-  if(!walk(x,y))return false;
-  const r=5.5;
-  for(let a=0;a<8;a++){
-    const ang=a*Math.PI/4;
-    if(!walk(x+Math.cos(ang)*r,y+Math.sin(ang)*r))return false;
-  }
-  return true;
-};
+// A máscara já marca o asfalto. Validar vários pontos ao redor do
+// personagem fechava trechos estreitos e isolava a rua do ponto A.
+// A colisão passa a validar o centro do personagem, mantendo-o na via.
+const onRoad=(x,y)=>walk(x,y)===1;
 const roadSegment=(x1,y1,x2,y2)=>{
   const d=Math.hypot(x2-x1,y2-y1),n=Math.max(2,Math.ceil(d/2.5));
   for(let i=1;i<=n;i++){
@@ -29,71 +22,71 @@ const TR = [
   { s: 'a',  x: 992,  y: 334, r: 18, c: 'r', l: 'a' }, // Fresh Kingdom
   { s: 'b',  x: 1300, y: 320, r: 18, c: 'r', l: 'b' }, // Restaurante redondo
   { s: 'c',  x: 276,  y: 310, r: 16, c: 'r', l: 'c' }, // Tomoria
-  { s: 'd',  x: 910,  y: 171, r: 18, c: 'r', l: 'd' }, // Restaurante acima do porto a (entrada frontal; itens K/D)
+  { s: 'd',  x: 875,  y: 174, r: 18, c: 'r', l: 'd' }, // Ponto de coleta D/K, em frente ao estabelecimento, fora do centro da via
 
   // Portos posicionados na frente da porta de cada casa.
-  { s: 'a1', x: 598,  y: 360, r: 18, c: 'h', l: 'A' }, // Casa verde
-  { s: 'b1', x: 976,  y: 526, r: 18, c: 'h', l: 'B' }, // Casa vermelha inferior
-  { s: 'c1', x: 1386, y: 500, r: 18, c: 'h', l: 'C' }, // Casa azul
-  { s: 'd1', x: 263,  y: 507, r: 18, c: 'h', l: 'D' }, // Casa vermelha esquerda
+  { s: 'A', x: 598,  y: 360, r: 18, c: 'h', l: 'A' }, // Casa verde
+  { s: 'B', x: 976,  y: 526, r: 18, c: 'h', l: 'B' }, // Casa vermelha inferior
+  { s: 'C', x: 1386, y: 500, r: 18, c: 'h', l: 'C' }, // Casa azul
+  { s: 'D', x: 263,  y: 507, r: 18, c: 'h', l: 'D' }, // Casa vermelha esquerda
 
   // Moeda.
   { s: 'm', x: 585, y: 156, r: 18, c: 's', l: 'F' },
 
   // Pedágio existente.
-  { s: 'po', g: [350, 310, 394, 354], c: 'g', o: 'po' },
+  { s: 'G', g: [350, 310, 394, 354], c: 'g', o: 'G' },
 
   // Pedágios posicionados sobre os dois semáforos amarelos.
-  { s: 'pe1', g: [1104, 190, 1132, 218], c: 't', o: 'pe1' }, // 1º semáforo — pé do poste
-  { s: 'pe2', g: [1162, 369, 1190, 397], c: 't', o: 'pe2' }, // 2º semáforo — pé do poste
+  { s: 'P', g: [1104, 190, 1132, 218], c: 't', o: 'P' }, // 1º semáforo — pé do poste
+  { s: 'E', g: [1162, 369, 1190, 397], c: 't', o: 'E' }, // 2º semáforo — pé do poste
 ];
 
 /* regras lidas de entregas_corrigido.jff: estado-origem estado-destino leitura topo empilha (λ = vazio) */
 const RT=`q0 q0 a V A
-q0 q0 a1 A M
+q0 q0 A A M
 q0 q0 d W KD
 q0 q0 m M λ
 q1 q1 a V A
-q1 q1 a1 A M
+q1 q1 A A M
 q1 q1 c U C
-q1 q1 c1 C M
-q1 q1 d1 D M
+q1 q1 C C M
+q1 q1 D D M
 q1 q1 m M λ
 q2 q2 a V A
-q2 q2 a1 A M
+q2 q2 A A M
 q2 q2 d W KD
 q2 q2 b T B
-q2 q2 b1 B M
+q2 q2 B B M
 q2 q2 m M λ
 q3 q3 a V A
-q3 q3 a1 A M
+q3 q3 A A M
 q3 q3 d W KD
 q3 q3 b T B
-q3 q3 b1 B M
+q3 q3 B B M
 q3 q3 m M λ
 q4 q4 a V A
-q4 q4 a1 A M
+q4 q4 A A M
 q4 q4 b T B
-q4 q4 b1 B M
+q4 q4 B B M
 q4 q4 c U C
-q4 q4 c1 C M
-q4 q4 d1 D M
+q4 q4 C C M
+q4 q4 D D M
 q4 q4 m M λ
 q5 q5 a V A
-q5 q5 a1 A M
+q5 q5 A A M
 q5 q5 b T B
-q5 q5 b1 B M
+q5 q5 B B M
 q5 q5 c U C
-q5 q5 c1 C M
-q5 q5 d1 D M
+q5 q5 C C M
+q5 q5 D D M
 q5 q5 m M λ
-q0 q1 po K U
-q2 q4 po K U
-q3 q5 po K U
-q0 q2 pe1 M T
-q1 q4 pe1 M T
-q2 q3 pe2 M λ
-q4 q5 pe2 M λ
+q0 q1 G K U
+q2 q4 G K U
+q3 q5 G K U
+q0 q2 P M T
+q1 q4 P M T
+q2 q3 E M λ
+q4 q5 E M λ
 q5 q6 λ Z Z
 q7 q0 λ Z VWZ
 q7 q0 λ Z WVZ`;
@@ -107,7 +100,7 @@ const NM={
   q1:'portao',
   q2:'pedagio1',
   q3:'pedagio2',
-  q4:'poEpe1',
+  q4:'GEP',
   q5:'tdAberto',
   q6:'poupança',
   q7:'preparo'
@@ -126,7 +119,7 @@ const SN={
   D:'D · pedido',
   VW:'V W · ordem livre'
 };
-const TOK=['pe1','pe2','po','a1','b1','c1','d1','a','b','c','d','m'];
+const TOK=['A','B','C','D','G','P','E','a','b','c','d','m'];
 const $=i=>document.getElementById(i),cv=$('cv'),img=new Image();
 let ctx=cv.getContext('2d');
 
@@ -184,6 +177,8 @@ fitCanvas();
 
 
 let cfgs,dead,done,pos,reason,tm,sym,opened,keys={},soft=false,flash='',ft;
+let currentSequence=[];
+
 function say(m){
   flash=m;
   clearTimeout(ft);
@@ -241,6 +236,7 @@ function reset(){
   clearInterval(tm);
   tm=0;
   flash='';
+  currentSequence=[];
   cfgs=closure([{
     st:'q7',stack:['Z']
   }]);
@@ -274,6 +270,7 @@ function step(s){
     return false
   }
   cfgs=closure(nx);
+  currentSequence.push(s);
   done=cfgs.some(c=>c.st==='q6');
   render();
   return true
@@ -441,6 +438,9 @@ async function loadAssets(){
 const IT={
   K:'key',
   T:'ticket',
+  V:'ticket',
+  U:'ticket',
+  W:'ticket',
   M:'coin',
   A:'pizza',
   B:'burger',
@@ -849,7 +849,7 @@ function drawHUDInner(){
 
   ctx.fillStyle='#765638';ctx.font='bold 13px sans-serif';
   ctx.textAlign='left';ctx.textBaseline='middle';
-  ctx.fillText('🎒  PILHA DE ITENS',px+12,py+20);
+  ctx.fillText('PILHA DE ITENS',px+12,py+20);
   ctx.fillStyle='#b08a5b';ctx.fillRect(px+10,py+36,PW-20,2);
 
   show.forEach((r,i)=>{
