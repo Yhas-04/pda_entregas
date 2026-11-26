@@ -1,13 +1,113 @@
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#faf6ef;--fg:#2b2118;--card:#fff;--bd:#e3d8c6;--acc:#e8590c}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1713;--fg:#f3ebe0;--card:#2a231c;--bd:#43382c;--acc:#ff922b}}
-:root[data-theme="dark"]{--bg:#1c1713;--fg:#f3ebe0;--card:#2a231c;--bd:#43382c;--acc:#ff922b}
+:root{
+  box-sizing:border-box;
+  --bg:#faf6ef;
+  --fg:#2b2118;
+  --card:#fff;
+  --bd:#e3d8c6;
+  --acc:#e8590c;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1c1713;
+    --fg:#f3ebe0;
+    --card:#2a231c;
+    --bd:#43382c;
+    --acc:#ff922b;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1c1713;
+  --fg:#f3ebe0;
+  --card:#2a231c;
+  --bd:#43382c;
+  --acc:#ff922b;
+}
 *{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,sans-serif;padding:0;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-canvas{flex:1 1 0;min-height:0;width:100%;height:100%;object-fit:contain;display:block;background:#000}
-.bar{display:flex;gap:8px;padding:8px 12px;flex-wrap:nowrap;flex:0 0 auto}
-input{flex:1 1 280px;min-width:0;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--fg);font:14px monospace}
-button{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:6px;padding:8px 14px;cursor:pointer;font:inherit}
-button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-button:hover,input:focus{border-color:var(--acc);outline:none}
-button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+html{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:var(--bg);
+}
+body{
+  position:fixed;           /* trava o corpo no viewport: sem rolagem nem corte */
+  inset:0;
+  padding-top:env(safe-area-inset-top,0px);
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--fg);
+  font:14px/1.4 system-ui,sans-serif;
+}
+/* .stage ocupa todo o espaço que sobra acima da barra. O tamanho do canvas
+   é calculado pelo JS (fitCanvas) em px CSS inteiros a partir DESTA caixa,
+   então não existe mais dependência circular entre canvas e layout. */
+.stage{
+  position:relative;
+  flex:1 1 0;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+#cv{
+  position:absolute;
+  left:0;
+  top:0;
+  display:block;
+  background:#000;
+  /* width/height em px são definidos pelo JS; 0 até a primeira medição */
+  width:0;
+  height:0;
+}
+.bar{
+  flex:0 0 auto;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  max-width:100%;
+  padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));
+  background:var(--bg);
+}
+input{
+  flex:1 1 280px;
+  min-width:0;
+  padding:8px 10px;
+  border:1px solid var(--bd);
+  border-radius:6px;
+  background:var(--card);
+  color:var(--fg);
+  font:14px monospace;
+}
+button{
+  flex:0 0 auto;
+  border:1px solid var(--bd);
+  background:var(--card);
+  color:var(--fg);
+  border-radius:6px;
+  padding:9px 16px;
+  cursor:pointer;
+  font:500 14px/1.4 system-ui,sans-serif;
+}
+button.on{
+  background:var(--acc);
+  color:#fff;
+  border-color:var(--acc);
+}
+button:hover,input:focus{
+  border-color:var(--acc);
+  outline:none;
+}
+button:focus-visible{
+  outline:2px solid var(--acc);
+  outline-offset:2px;
+}
+@media(max-width:700px){
+  .bar{gap:6px;padding:6px}
+  button{padding:8px 11px;font-size:13px}
+  input{flex:1 1 100%;order:5}
+}

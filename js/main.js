@@ -1,4 +1,4 @@
-const W=1476,H=632,SP=3,MW=369;
+const W=1476,H=632,SP=4.5,MW=369;
 let bits;
 const walk=(x,y)=>{
   if(x<0||y<0||x>=W||y>=H)return 0;
@@ -6,17 +6,17 @@ const walk=(x,y)=>{
   return(bits[i>>3]>>(7-(i&7)))&1
 };
 const TR = [
-  // Portas dos restaurantes.
-  { s: 'a', x: 1000, y: 296, r: 18, c: 'r', l: 'a' }, // Fresh Kingdom
-  { s: 'b', x: 1295, y: 304, r: 18, c: 'r', l: 'b' }, // Restaurante redondo
-  { s: 'c', x: 274, y: 276, r: 16, c: 'r', l: 'c' },  // Tomoria
-  { s: 'd', x: 815, y: 214, r: 18, c: 'r', l: 'd' },  // Restaurante superior
+  // Portos posicionados na frente da entrada de cada estabelecimento.
+  { s: 'a',  x: 992,  y: 334, r: 18, c: 'r', l: 'a' }, // Fresh Kingdom
+  { s: 'b',  x: 1300, y: 320, r: 18, c: 'r', l: 'b' }, // Restaurante redondo
+  { s: 'c',  x: 276,  y: 310, r: 16, c: 'r', l: 'c' }, // Tomoria
+  { s: 'd',  x: 910,  y: 171, r: 18, c: 'r', l: 'd' }, // Restaurante acima do porto a (entrada frontal; itens K/D)
 
-  // Portas das casas.
-  { s: 'a1', x: 595, y: 316, r: 18, c: 'h', l: 'A' },  // Casa verde
-  { s: 'b1', x: 955, y: 476, r: 18, c: 'h', l: 'B' },  // Casa vermelha central
-  { s: 'c1', x: 1370, y: 442, r: 18, c: 'h', l: 'C' }, // Casa azul
-  { s: 'd1', x: 270, y: 478, r: 18, c: 'h', l: 'D' },  // Casa vermelha esquerda
+  // Portos posicionados na frente da porta de cada casa.
+  { s: 'a1', x: 598,  y: 360, r: 18, c: 'h', l: 'A' }, // Casa verde
+  { s: 'b1', x: 976,  y: 526, r: 18, c: 'h', l: 'B' }, // Casa vermelha inferior
+  { s: 'c1', x: 1386, y: 500, r: 18, c: 'h', l: 'C' }, // Casa azul
+  { s: 'd1', x: 263,  y: 507, r: 18, c: 'h', l: 'D' }, // Casa vermelha esquerda
 
   // Moeda.
   { s: 'm', x: 585, y: 156, r: 18, c: 's', l: 'F' },
@@ -24,9 +24,9 @@ const TR = [
   // Pedágio existente.
   { s: 'po', g: [350, 310, 394, 354], c: 'g', o: 'po' },
 
-  // Pedágios nos semáforos amarelos: primeiro e segundo, respectivamente.
-  { s: 'pe1', g: [1096, 112, 1140, 156], c: 't', o: 'pe1' },
-  { s: 'pe2', g: [1150, 291, 1194, 335], c: 't', o: 'pe2' },
+  // Pedágios posicionados sobre os dois semáforos amarelos.
+  { s: 'pe1', g: [1104, 190, 1132, 218], c: 't', o: 'pe1' }, // 1º semáforo — pé do poste
+  { s: 'pe2', g: [1162, 369, 1190, 397], c: 't', o: 'pe2' }, // 2º semáforo — pé do poste
 ];
 
 /* regras lidas de entregas_corrigido.jff: estado-origem estado-destino leitura topo empilha (λ = vazio) */
@@ -110,6 +110,60 @@ const SN={
 const TOK=['pe1','pe2','po','a1','b1','c1','d1','a','b','c','d','m'];
 const $=i=>document.getElementById(i),cv=$('cv'),img=new Image();
 let ctx=cv.getContext('2d');
+
+/*
+ * SISTEMA DE COORDENADAS ÚNICO
+ * ----------------------------
+ * Tudo (fundo, portos, pedágios, colisão, esquilo, popups, painel da pilha)
+ * vive no espaço lógico W × H = 1476 × 632, que é exatamente metade do
+ * background.jpg (2952 × 1264). Nada é posicionado em px de tela.
+ *
+ * S = pixels de dispositivo por unidade lógica. É o ÚNICO fator de escala:
+ * canvas, camadas em cache (itens/personagens) e HUD usam o mesmo S.
+ *
+ * O tamanho exibido é calculado a partir da caixa .stage (largura E altura
+ * disponíveis), em px CSS inteiros e com a proporção W:H exata, e aplicado
+ * como style.width/height. O canvas nunca mede a si mesmo, então não há
+ * dependência circular e o resultado é igual no Chrome e no VS Code.
+ */
+const stage=cv.parentElement;
+let S=1,cssW=W,cssH=H;
+function fitCanvas(){
+  const aw=stage.clientWidth,ah=stage.clientHeight;
+  if(aw<2||ah<2)return;
+
+  const dpr=window.devicePixelRatio||1;
+
+  // 1) trabalha em PIXELS DE DISPOSITIVO: maior W:H que cabe na área
+  const fit=Math.min(aw*dpr/W,ah*dpr/H);
+  const pw=Math.max(1,Math.floor(W*fit));
+  S=pw/W;                                   // escala única, igual em x e y
+  const ph_=Math.max(1,Math.min(Math.floor(ah*dpr),Math.round(H*S)));
+
+  // 2) 1 pixel do bitmap = 1 pixel físico: sem reamostragem pelo navegador
+  cssW=pw/dpr;
+  cssH=ph_/dpr;
+  cv.style.width=cssW+'px';
+  cv.style.height=cssH+'px';
+  cv.style.left=Math.round((aw-cssW)/2*dpr)/dpr+'px';
+  cv.style.top=Math.round((ah-cssH)/2*dpr)/dpr+'px';
+
+  if(cv.width!==pw||cv.height!==ph_){
+    cv.width=pw;
+    cv.height=ph_;
+  }
+  ctx.setTransform(S,0,0,S,0,0);
+}
+new ResizeObserver(fitCanvas).observe(stage);
+window.addEventListener('resize',fitCanvas,{passive:true});
+// monitor movido entre telas / zoom do navegador muda o dpr sem mudar o tamanho
+(function watchDpr(){
+  const mq=matchMedia(`(resolution:${window.devicePixelRatio||1}dppx)`);
+  mq.addEventListener('change',()=>{fitCanvas();watchDpr()},{once:true});
+})();
+fitCanvas();
+
+
 let cfgs,dead,done,pos,reason,tm,sym,opened,keys={},soft=false,flash='',ft;
 function say(m){
   flash=m;
@@ -227,6 +281,8 @@ const COL={
 };
 function draw(){
 
+  ctx.setTransform(S,0,0,S,0,0);
+  ctx.imageSmoothingQuality='high';
   ctx.drawImage(img,0,0,W,H);
   ctx.textAlign='center';
   ctx.textBaseline='middle';
@@ -273,7 +329,7 @@ function parseMTL(text){
   const out={};
   let name='default';
   for(const line of text.split(/\r?\n/)){
-    const p=line.trim().split(/\\s+/);
+    const p=line.trim().split(/\s+/);
     if(p[0]==='newmtl'){
       name=p[1];
       out[name]=[190,190,190]
@@ -299,7 +355,7 @@ function parseOBJ(text,materials){
   };
 
   for(const line of text.split(/\r?\n/)){
-    const p=line.trim().split(/\\s+/);
+    const p=line.trim().split(/\s+/);
     if(p[0]==='v'&&p.length>=4)verts.push(p.slice(1,4).map(Number));
     else if(p[0]==='usemtl')mat=p[1];
     else if(p[0]==='f'&&p.length>=4)addFace(p.slice(1).map(x=>Number(x.split('/')[0])))
@@ -633,21 +689,29 @@ const BILL=Math.PI/2-PH,ITKB={
 const LW=200,LH=170,LAX=100,LAY=125,LAYER_DT=1/30;
 function mkLayer(){
   const c=document.createElement('canvas');
-  c.width=LW;
-  c.height=LH;
   return{
     c,
     g:c.getContext('2d'),
     t:-9,
-    sig:''
+    sig:'',
+    s:0
   }
 }
 function layer(L,sig,x,y,paint){
 
+  // camada na mesma escala do canvas principal (nada de bitmap 1x esticado)
+  if(L.s!==S){
+    L.c.width=Math.max(1,Math.round(LW*S));
+    L.c.height=Math.max(1,Math.round(LH*S));
+    L.s=S;
+    L.sig=''
+  }
   if(L.sig!==sig||NOW-L.t>=LAYER_DT||NOW<L.t){
     const real=ctx;
     ctx=L.g;
-    L.g.clearRect(0,0,LW,LH);
+    L.g.setTransform(1,0,0,1,0,0);
+    L.g.clearRect(0,0,L.c.width,L.c.height);
+    L.g.setTransform(S,0,0,S,0,0);
     try{
       paint(LAX,LAY)
     }
@@ -657,7 +721,8 @@ function layer(L,sig,x,y,paint){
     L.t=NOW;
     L.sig=sig
   }
-  ctx.drawImage(L.c,Math.round(x)-LAX,Math.round(y)-LAY)
+  // arredonda em pixels de DISPOSITIVO (não em unidades lógicas)
+  ctx.drawImage(L.c,Math.round((x-LAX)*S)/S,Math.round((y-LAY)*S)/S,LW,LH)
 }
 const ITEMS_L=mkLayer();
 function drawItems(x,y,s,cs,sn,bob,tt){
@@ -717,17 +782,20 @@ function drawSquirrel(x,y){
 }
 /* painel da pilha no canto da tela (topo no alto), com os itens 3D agrupados */
 const hudCv=document.createElement('canvas');
-hudCv.width=260;
-hudCv.height=H;
-let hudSig='';
+let hudSig='',hudS=0;
 function drawHUD(){
   const sig=viewStack().join('');
 
-  if(sig!==hudSig){
+  if(sig!==hudSig||hudS!==S){
     hudSig=sig;
+    hudS=S;
+    hudCv.width=Math.max(1,Math.round(260*S));
+    hudCv.height=Math.max(1,Math.round(H*S));
     const real=ctx,
     hc=hudCv.getContext('2d');
-    hc.clearRect(0,0,260,H);
+    hc.setTransform(1,0,0,1,0,0);
+    hc.clearRect(0,0,hudCv.width,hudCv.height);
+    hc.setTransform(S,0,0,S,0,0);
     hc.save();
     hc.translate(-(W-260),0);
     ctx=hc;
@@ -739,7 +807,7 @@ function drawHUD(){
       hc.restore()
     }
   }
-  ctx.drawImage(hudCv,W-260,0)
+  ctx.drawImage(hudCv,W-260,0,260,H)
 }
 function drawHUDInner(){
 
