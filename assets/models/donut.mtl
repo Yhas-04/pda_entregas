@@ -1,0 +1,9 @@
+# Materials for donut
+newmtl m0
+Kd 0.85098 0.58431 0.29020
+Ka 0 0 0
+
+newmtl m1
+Kd 1.00000 0.43529 0.64706
+Ka 0 0 0
+

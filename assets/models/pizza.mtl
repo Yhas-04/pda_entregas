@@ -1,0 +1,17 @@
+# Materials for pizza
+newmtl m0
+Kd 0.90980 0.70588 0.35294
+Ka 0 0 0
+
+newmtl m1
+Kd 0.96471 0.76863 0.22745
+Ka 0 0 0
+
+newmtl m2
+Kd 0.78824 0.54118 0.23529
+Ka 0 0 0
+
+newmtl m3
+Kd 0.77647 0.15686 0.15686
+Ka 0 0 0
+

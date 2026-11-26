@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entregador PDA</title>
+<link rel="stylesheet" href="./css/style.css"></head><body>
+<canvas id="cv" width="1476" height="632"></canvas>
+<div class="bar">
+ <button id="rst">↺ Reiniciar</button>
+ <button id="mR" class="on" title="Segue o autômato à risca: transição inexistente rejeita a entrada">Modo rígido</button>
+ <button id="mS" title="Passa por qualquer ponto; só os pontos com transição válida (brilhando) fazem efeito">Modo soft</button>
+ <input id="inp" placeholder="a a1 pe1 b b1 pe2 d po c c1 m d1 m" autocomplete="off" spellcheck="false">
+ <button id="run">▶ Inserir sequência</button>
+</div>
+<script src="./js/main.js" defer></script></body></html>

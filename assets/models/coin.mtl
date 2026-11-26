@@ -1,0 +1,13 @@
+# Materials for coin
+newmtl m0
+Kd 0.95686 0.70588 0.00000
+Ka 0 0 0
+
+newmtl m1
+Kd 0.78824 0.54118 0.00000
+Ka 0 0 0
+
+newmtl m2
+Kd 1.00000 0.84706 0.30196
+Ka 0 0 0
+

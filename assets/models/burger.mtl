@@ -1,0 +1,25 @@
+# Materials for burger
+newmtl m0
+Kd 0.85098 0.58431 0.29020
+Ka 0 0 0
+
+newmtl m1
+Kd 0.43529 0.74902 0.22745
+Ka 0 0 0
+
+newmtl m2
+Kd 1.00000 0.78824 0.15686
+Ka 0 0 0
+
+newmtl m3
+Kd 0.41961 0.22745 0.11765
+Ka 0 0 0
+
+newmtl m4
+Kd 0.87843 0.62745 0.30588
+Ka 0 0 0
+
+newmtl m5
+Kd 1.00000 0.94902 0.80000
+Ka 0 0 0
+

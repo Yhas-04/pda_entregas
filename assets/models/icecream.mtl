@@ -1,0 +1,17 @@
+# Materials for icecream
+newmtl m0
+Kd 0.85098 0.64314 0.35294
+Ka 0 0 0
+
+newmtl m1
+Kd 1.00000 0.56078 0.72157
+Ka 0 0 0
+
+newmtl m2
+Kd 1.00000 0.94118 0.81569
+Ka 0 0 0
+
+newmtl m3
+Kd 0.83922 0.15686 0.15686
+Ka 0 0 0
+

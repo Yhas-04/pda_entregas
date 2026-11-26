@@ -1,0 +1,13 @@
+# Materials for ticket
+newmtl m0
+Kd 1.00000 0.54118 0.12157
+Ka 0 0 0
+
+newmtl m1
+Kd 1.00000 0.95294 0.83922
+Ka 0 0 0
+
+newmtl m2
+Kd 0.85098 0.41569 0.00000
+Ka 0 0 0
+
