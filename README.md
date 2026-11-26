@@ -21,7 +21,7 @@
 
 ## Aceitação
 
-O roteiro é aceito se a pilha chegar a **q5** somente com **Z** e a entrada acabar. Isso obriga a:
+O roteiro é aceito se a pilha chegar a **q6** e a entrada acabar. Isso obriga a:
 
 - Retirar e entregar os 4 pedidos (todo ticket precisa ser usado).
 - Cumprir os 3 objetivos (G, P, E).
