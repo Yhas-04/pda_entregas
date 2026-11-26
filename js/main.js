@@ -952,11 +952,13 @@ function drawOverlay(){
   ctx.textBaseline='middle';
   ctx.font='bold 20px sans-serif';
 
+  w1=ctx.measureText(t1).width+24;
 
   ctx.fillStyle='rgba(24,18,12,.8)';
-  rr(12,12,34,10);
+  rr(12,12,w1,34,10);
   ctx.fill();
   ctx.fillStyle='#ffd8a8';
+  ctx.fillText(t1,24,30);
 
   if(flash&&!dead&&!done){
     ctx.font='bold 18px sans-serif';
