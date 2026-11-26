@@ -8,7 +8,13 @@ const walk=(x,y)=>{
 // A máscara já marca o asfalto. Validar vários pontos ao redor do
 // personagem fechava trechos estreitos e isolava a rua do ponto A.
 // A colisão passa a validar o centro do personagem, mantendo-o na via.
-const onRoad=(x,y)=>walk(x,y)===1;
+// gramado entre o ponto A e a rua do B: sempre bloqueado
+const grama=(x,y)=>
+  (x>=1018&&x<1143.7+(y-350)*0.29&&y>=340&&y<420)||
+  (x>=1000&&x<1018&&y>=372&&y<384);
+// modo soft: portão/pedágio fechado e sem chave/moeda funciona como parede
+const barrado=(x,y)=>soft&&TR.some(t=>t.o&&!opened[t.o]&&!can(t.s)&&inside(t,x,y));
+const onRoad=(x,y)=>walk(x,y)===1&&!grama(x,y)&&!barrado(x,y);
 const roadSegment=(x1,y1,x2,y2)=>{
   const d=Math.hypot(x2-x1,y2-y1),n=Math.max(2,Math.ceil(d/2.5));
   for(let i=1;i<=n;i++){
@@ -37,8 +43,8 @@ const TR = [
   { s: 'G', g: [350, 310, 394, 354], c: 'g', o: 'G' },
 
   // Pedágios posicionados sobre os dois semáforos amarelos.
-  { s: 'P', g: [1104, 190, 1132, 218], c: 't', o: 'P' }, // 1º semáforo — pé do poste
-  { s: 'E', g: [1162, 369, 1190, 397], c: 't', o: 'E' }, // 2º semáforo — pé do poste
+  { s: 'P', g: [1104, 184, 1148, 218], c: 't', o: 'P' }, // 1º semáforo — pé do poste
+  { s: 'E', g: [1150, 369, 1200, 397], c: 't', o: 'E' }, // 2º semáforo — pé do poste
 ];
 
 /* regras lidas de entregas_corrigido.jff: estado-origem estado-destino leitura topo empilha (λ = vazio) */
@@ -277,11 +283,7 @@ function step(s){
 }
 function fire(t){
 
-    if(soft&&!can(t.s)){
-    say(`Soft: “${t.s}” passou sem efeito (sem transição em ${cur().st} com ${topOf()==='Z'?'só Z':topOf()} no topo).`);
-    return
-  }
-
+  if(soft&&!can(t.s))return; // soft: ignora sem mensagem
   let ok=step(t.s);
   if(ok&&t.o)opened[t.o]=1;
   if(ok&&/^[a-d]1?$/.test(t.s))spawnChar(t);
@@ -956,17 +958,18 @@ function drawOverlay(){
   ctx.textAlign='left';
   ctx.textBaseline='middle';
   ctx.font='bold 20px sans-serif';
-
-  const t1=`${c.st} · ${NM[c.st]}`,
+  const t1 = ""+(c?SN[c]||c:'');
   w1=ctx.measureText(t1).width+24;
 
-  ctx.fillStyle='rgba(24,18,12,.8)';
-  rr(12,12,w1,34,10);
-  ctx.fill();
-  ctx.fillStyle='#ffd8a8';
-  ctx.fillText(t1,24,30);
+  if(!soft){
+    ctx.fillStyle='rgba(24,18,12,.8)';
+    rr(12,12,w1,34,10);
+    ctx.fill();
+    ctx.fillStyle='#ffd8a8';
+    ctx.fillText(t1,24,30)
+  }
 
-  if(flash&&!dead&&!done){
+  if(!soft&&flash&&!dead&&!done){
     ctx.font='bold 18px sans-serif';
     const w2=ctx.measureText(flash).width+24;
     ctx.fillStyle='rgba(24,18,12,.85)';
@@ -975,7 +978,7 @@ function drawOverlay(){
     ctx.fillStyle='#ffe066';
     ctx.fillText(flash,24,71)
   }
-  if(dead||done){
+  if(done||(dead&&!soft)){
 
     const msg=dead?'REJEITADA — '+reason:'ACEITA — chegou ao estado final q6 (poupança), pilha só com Z.',
     col=dead?'#ff8787':'#69db7c',
@@ -1027,16 +1030,6 @@ function slide(dx,dy,k){
       const a=a0+o,c=Math.cos(a),s=Math.sin(a),
       nx=pos.x+c*L,ny=pos.y+s*L;
       if(!roadSegment(pos.x,pos.y,nx,ny))continue;
-      if (soft) {
-    const blocked = TR.some(t =>
-        ['G', 'P', 'E'].includes(t.s) &&
-        !can(t.s) &&
-        !inside(t, pos.x, pos.y) &&
-        inside(t, nx, ny)
-    );
-
-    if (blocked) continue;
-}
       let free=0;
       for(let d=6;d<=30;d+=6){
         if(onRoad(pos.x+c*d,pos.y+s*d))free++;
