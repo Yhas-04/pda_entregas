@@ -277,6 +277,11 @@ function step(s){
 }
 function fire(t){
 
+    if(soft&&!can(t.s)){
+    say(`Soft: “${t.s}” passou sem efeito (sem transição em ${cur().st} com ${topOf()==='Z'?'só Z':topOf()} no topo).`);
+    return
+  }
+
   let ok=step(t.s);
   if(ok&&t.o)opened[t.o]=1;
   if(ok&&/^[a-d]1?$/.test(t.s))spawnChar(t);
@@ -1022,6 +1027,16 @@ function slide(dx,dy,k){
       const a=a0+o,c=Math.cos(a),s=Math.sin(a),
       nx=pos.x+c*L,ny=pos.y+s*L;
       if(!roadSegment(pos.x,pos.y,nx,ny))continue;
+      if (soft) {
+    const blocked = TR.some(t =>
+        ['G', 'P', 'E'].includes(t.s) &&
+        !can(t.s) &&
+        !inside(t, pos.x, pos.y) &&
+        inside(t, nx, ny)
+    );
+
+    if (blocked) continue;
+}
       let free=0;
       for(let d=6;d<=30;d+=6){
         if(onRoad(pos.x+c*d,pos.y+s*d))free++;
