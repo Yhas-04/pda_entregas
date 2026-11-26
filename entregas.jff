@@ -242,18 +242,18 @@
 			<push>KD</push>
 		</transition>
 		<transition>
-			<from>5</from>
-			<to>6</to>
-			<read/>
-			<pop>Z</pop>
-			<push>Z</push>
-		</transition>
-		<transition>
 			<from>1</from>
 			<to>4</to>
 			<read>P</read>
 			<pop>M</pop>
 			<push>T</push>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>6</to>
+			<read/>
+			<pop>Z</pop>
+			<push/>
 		</transition>
 		<transition>
 			<from>2</from>
