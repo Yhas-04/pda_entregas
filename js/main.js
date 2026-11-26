@@ -31,7 +31,7 @@ const TR = [
   { s: 'D', x: 263,  y: 507, r: 18, c: 'h', l: 'D' }, // Casa vermelha esquerda
 
   // Moeda.
-  { s: 'm', x: 585, y: 156, r: 18, c: 's', l: 'F' },
+  { s: 'm', x: 585, y: 156, r: 18, c: 's', l: 'm' },
 
   // Pedágio existente.
   { s: 'G', g: [350, 310, 394, 354], c: 'g', o: 'G' },
@@ -42,54 +42,54 @@ const TR = [
 ];
 
 /* regras lidas de entregas_corrigido.jff: estado-origem estado-destino leitura topo empilha (λ = vazio) */
-const RT=`q0 q0 a V A
-q0 q0 A A M
-q0 q0 d W KD
-q0 q0 m M λ
-q1 q1 a V A
-q1 q1 A A M
-q1 q1 c U C
+const RT=`q4 q4 B B M
 q1 q1 C C M
 q1 q1 D D M
-q1 q1 m M λ
-q2 q2 a V A
-q2 q2 A A M
-q2 q2 d W KD
-q2 q2 b T B
 q2 q2 B B M
-q2 q2 m M λ
-q3 q3 a V A
-q3 q3 A A M
-q3 q3 d W KD
-q3 q3 b T B
-q3 q3 B B M
-q3 q3 m M λ
-q4 q4 a V A
-q4 q4 A A M
-q4 q4 b T B
-q4 q4 B B M
-q4 q4 c U C
+q1 q1 A A M
+q0 q0 A A M
 q4 q4 C C M
-q4 q4 D D M
-q4 q4 m M λ
-q5 q5 a V A
-q5 q5 A A M
-q5 q5 b T B
-q5 q5 B B M
-q5 q5 c U C
+q2 q2 A A M
 q5 q5 C C M
+q5 q5 B B M
+q3 q3 A A M
 q5 q5 D D M
-q5 q5 m M λ
+q4 q4 A A M
+q3 q3 B B M
+q4 q4 D D M
+q5 q5 A A M
 q0 q1 G K U
-q2 q4 G K U
-q3 q5 G K U
-q0 q2 P M T
-q1 q4 P M T
-q2 q3 E M λ
-q4 q5 E M λ
-q5 q6 λ Z Z
 q7 q0 λ Z VWZ
-q7 q0 λ Z WVZ`;
+q0 q2 P M T
+q2 q2 m M λ
+q1 q1 m M λ
+q0 q0 m M λ
+q3 q3 m M λ
+q4 q4 m M λ
+q5 q5 m M λ
+q0 q0 d W KD
+q2 q2 d W KD
+q3 q3 d W KD
+q1 q4 P M T
+q5 q6 λ Z λ
+q2 q2 b T B
+q3 q3 b T B
+q4 q4 b T B
+q5 q5 b T B
+q1 q1 c U C
+q4 q4 c U C
+q5 q5 c U C
+q3 q5 G K U
+q4 q5 E M λ
+q0 q0 a V A
+q1 q1 a V A
+q2 q2 a V A
+q3 q3 a V A
+q4 q4 a V A
+q5 q5 a V A
+q7 q0 λ Z WVZ
+q2 q3 E M λ
+q2 q4 G K U`;
 const R=RT.split('\n').map(l=>{
   const[f,t,r,p,w]=l.split(' ');return{
     f,t,r,p,w
@@ -1085,7 +1085,8 @@ function loop(){
 }
 function parse(txt){
   const out=[];
-  let s=txt.replace(/[\s,;]+/g,'');
+  let s=txt.trim();
+  if(/[\s,;]/.test(s))return null;
   while(s.length){
     const k=TOK.find(t=>s.startsWith(t));
     if(!k)return null;

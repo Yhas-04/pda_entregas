@@ -8,13 +8,13 @@
 </main>
 <div class="bar">
  <button id="rst">↺ Reiniciar</button>
- <button id="mR" class="on" title="Segue o autômato à risca: transição inexistente rejeita a entrada">Modo PDA</button>
+ <button id="mR" class="on" title="Segue o autômato à risca: transição inexistente rejeita a entrada">Modo Restrito PDA</button>
  <button id="mS" title="Passa por qualquer ponto; só os pontos com transição válida (brilhando) fazem efeito">Modo Livre</button>
- <input id="inp" placeholder="a A P b B E d G c C m D m" autocomplete="off" spellcheck="false">
- <button id="run">▶ Inserir sequência</button>
- <section class="stats-row" aria-live="polite" aria-label="Estatísticas de sequências aceitas">
-  <strong id="accepted-count">Carregando sequências aceitas…</strong>
-  <span id="accepted-list" class="accepted-list"></span>
- </section>
+<input id="inp" placeholder="Ex.: aAPbBmdGcCmDE" autocomplete="off" spellcheck="false">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%;">
+    <input id="msg" class="msg" value="EX ACEITOS: aAPbBmdGcCmDE - aAPbBmdGcCEDm - aAPbBEdGcCmDm" readonly>
+    <input id="msg" class="msg" value="EX REJEITADOS: aAPbBmdGcCmD - aAPbBmdGcCmED - BDmBEdGcCmDm" readonly>
+    <button id="run">▶ Inserir sequência</button>
+</div>
 </div>
 <script src="./js/main.js" defer></script></body></html>
