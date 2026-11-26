@@ -1,9 +1,28 @@
-const W=1476,H=632,SP=4.5,MW=369;
+const W=1476,H=632,SP=3.6,MW=369;
 let bits;
 const walk=(x,y)=>{
   if(x<0||y<0||x>=W||y>=H)return 0;
   const i=((y|0)>>2)*MW+((x|0)>>2);
   return(bits[i>>3]>>(7-(i&7)))&1
+};
+// A máscara representa somente o asfalto. A amostragem ao redor do
+// personagem evita que ele atravesse a borda e pise na grama.
+const onRoad=(x,y)=>{
+  if(!walk(x,y))return false;
+  const r=5.5;
+  for(let a=0;a<8;a++){
+    const ang=a*Math.PI/4;
+    if(!walk(x+Math.cos(ang)*r,y+Math.sin(ang)*r))return false;
+  }
+  return true;
+};
+const roadSegment=(x1,y1,x2,y2)=>{
+  const d=Math.hypot(x2-x1,y2-y1),n=Math.max(2,Math.ceil(d/2.5));
+  for(let i=1;i<=n;i++){
+    const t=i/n;
+    if(!onRoad(x1+(x2-x1)*t,y1+(y2-y1)*t))return false;
+  }
+  return true;
 };
 const TR = [
   // Portos posicionados na frente da entrada de cada estabelecimento.
@@ -810,68 +829,58 @@ function drawHUD(){
   ctx.drawImage(hudCv,W-260,0,260,H)
 }
 function drawHUDInner(){
-
-  const rows=[],
-  vs=viewStack();
+  const rows=[],vs=viewStack();
   for(let i=vs.length-1;i>=0;i--){
-    const c=vs[i],
-    r=rows[rows.length-1];
+    const c=vs[i],r=rows[rows.length-1];
     if(r&&r.c===c)r.n++;
-    else rows.push({
-      c,n:1
-    })
+    else rows.push({c,n:1});
   }
-  const RH=40,
-  PW=158,
-  show=rows.slice(0,8),
-  PHh=30+show.length*RH+(rows.length>8?16:0),
-  px=W-PW-12,
-  py=12;
+  const RH=42,PW=174,show=rows.slice(0,8),
+  PHh=42+show.length*RH+(rows.length>8?18:0),
+  px=W-PW-12,py=12;
 
   ctx.save();
-  ctx.translate(W,0);
-  ctx.scale(1.35,1.35);
-  ctx.translate(-W,0);
+  ctx.translate(W,0);ctx.scale(1.35,1.35);ctx.translate(-W,0);
   ctx.globalAlpha=1;
-  ctx.fillStyle='rgba(24,18,12,.8)';
-  ctx.strokeStyle='rgba(255,255,255,.35)';
-  ctx.lineWidth=2;
+  ctx.shadowColor='rgba(42,31,20,.22)';ctx.shadowBlur=16;ctx.shadowOffsetY=5;
+  ctx.fillStyle='rgba(255,250,240,.96)';ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=2;
+  rr(px,py,PW,PHh,16);ctx.fill();ctx.stroke();
+  ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
 
-  ctx.beginPath();
-  ctx.roundRect?ctx.roundRect(px,py,PW,PHh,12):ctx.rect(px,py,PW,PHh);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle='#ffd8a8';
-  ctx.font='bold 12px sans-serif';
-  ctx.textAlign='left';
-  ctx.textBaseline='middle';
-  ctx.fillText('PILHA · topo ↓',px+12,py+15);
+  ctx.fillStyle='#765638';ctx.font='bold 13px sans-serif';
+  ctx.textAlign='left';ctx.textBaseline='middle';
+  ctx.fillText('🎒  PILHA DE ITENS',px+12,py+20);
+  ctx.fillStyle='#b08a5b';ctx.fillRect(px+10,py+36,PW-20,2);
 
   show.forEach((r,i)=>{
-    const y0=py+28+i*RH,cy=y0+RH/2;
-    ctx.fillStyle=i===0?'rgba(255,146,43,.25)':'rgba(255,255,255,.07)';ctx.beginPath();ctx.roundRect?ctx.roundRect(px+6,y0+2,PW-12,RH-4,8):ctx.rect(px+6,y0+2,PW-12,RH-4);ctx.fill();
+    const y0=py+42+i*RH,cy=y0+RH/2;
+    ctx.fillStyle=i===0?'#fff0d5':'#f5f0e7';
+    ctx.strokeStyle=i===0?'#efc98e':'#e9dfd0';ctx.lineWidth=1;
+    rr(px+8,y0+3,PW-16,RH-6,10);ctx.fill();ctx.stroke();
+
     const nm=IT[r.c];
     if(nm){
-      const M=MESH[nm];drawMesh(M,M.V,mm(RX(BILL),sc3(I3,.42)),0,0,0,px+30,cy+4,3.2,1,0)
+      const M=MESH[nm];
+      drawMesh(M,M.V,mm(RX(BILL),sc3(I3,.42)),0,0,0,px+31,cy+4,3.2,1,0);
+    }else{
+      ctx.fillStyle=r.c==='Z'?'#9b8063':r.c==='VW'?'#5596c8':'#69a98a';
+      ctx.font='bold '+(r.c==='VW'?14:18)+'px sans-serif';
+      ctx.textAlign='center';ctx.fillText(r.c==='VW'?'V W':r.c,px+31,cy);
     }
-    else{
-      ctx.fillStyle=r.c==='Z'?'#9a8a78':'VWU'.includes(r.c[0])?'#74c0fc':'#8ce99a';ctx.font='bold '+(r.c==='VW'?15:18)+'px sans-serif';ctx.textAlign='center';ctx.fillText(r.c==='VW'?'V W':r.c,px+30,cy)
-    }
-    ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='left';
-    const lab=(SN[r.c]||r.c).split(' · ')[1]||r.c;ctx.fillText(r.c==='VW'?'ordem livre':r.c+' · '+lab,px+54,cy-(r.n>1?6:0));
+    ctx.fillStyle='#594735';ctx.font='bold 12px sans-serif';ctx.textAlign='left';
+    const lab=(SN[r.c]||r.c).split(' · ')[1]||r.c;
+    ctx.fillText(r.c==='VW'?'ordem livre':r.c+' · '+lab,px+55,cy-(r.n>1?5:0));
     if(r.n>1){
-      ctx.fillStyle='#ffd43b';ctx.font='bold 12px sans-serif';ctx.fillText('×'+r.n,px+54,cy+9)
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(px+PW-22,cy+5,9,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#9a6a32';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
+      ctx.fillText('×'+r.n,px+PW-22,cy+5);
     }
   });
-
   if(rows.length>8){
-    ctx.fillStyle='#ccc';
-    ctx.font='11px sans-serif';
-    ctx.textAlign='center';
-    ctx.fillText('… +'+(rows.length-8)+' grupos',px+PW/2,py+PHh-10)
+    ctx.fillStyle='#8b7965';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('… +'+(rows.length-8)+' grupos',px+PW/2,py+PHh-10);
   }
-  ctx.restore()
+  ctx.restore();
 }
 function spawnChar(t){
 
@@ -1003,60 +1012,30 @@ function drawActors(){
   drawOverlay()
 }
 const inside=(t,x,y)=>t.g?x>=t.g[0]&&x<=t.g[2]&&y>=t.g[1]&&y<=t.g[3]:Math.hypot(x-t.x,y-t.y)<t.r;
-/* movimento "colado na pista": se a direção pedida bate, escolhe o desvio (até ~80°) com mais caminho livre à frente, em 2 micro-passos */
-const FAN=[0,.3,-.3,.6,-.6,.9,-.9,1.2,-1.2,1.45,-1.45];
+/* Movimento limitado ao asfalto: só aceita candidatos cujo trajeto
+   inteiro e a área ocupada pelo personagem permaneçam dentro da rua. */
+const FAN=[0,.22,-.22,.45,-.45,.7,-.7,.95,-.95];
 function slide(dx,dy,k){
   const a0=Math.atan2(dy,dx),
   n=Math.max(2,Math.ceil(2*k)),
   L=Math.hypot(dx,dy)*SP*k/n;
 
   for(let sub=0;sub<n;sub++){
-    let best=null,
-    bs=-1e9;
-
+    let best=null,bs=-1e9;
     for(const o of FAN){
-      const a=a0+o,
-      c=Math.cos(a),
-      s=Math.sin(a),
-      nx=pos.x+c*L,
-      ny=pos.y+s*L;
-
-      if(!walk(nx,ny)||!walk((pos.x+nx)/2,(pos.y+ny)/2))continue;
-
+      const a=a0+o,c=Math.cos(a),s=Math.sin(a),
+      nx=pos.x+c*L,ny=pos.y+s*L;
+      if(!roadSegment(pos.x,pos.y,nx,ny))continue;
       let free=0;
-      for(let d=6;d<=30;d+=6)if(walk(pos.x+c*d,pos.y+s*d))free++;
-      else break;
-
-      const sc=free*2-Math.abs(o)*1.5+(o===0?1.5:0);
-      if(sc>bs){
-        bs=sc;
-        best=[nx,ny]
+      for(let d=6;d<=30;d+=6){
+        if(onRoad(pos.x+c*d,pos.y+s*d))free++;
+        else break;
       }
+      const score=free*2-Math.abs(o)*1.5+(o===0?1.5:0);
+      if(score>bs){bs=score;best=[nx,ny]}
     }
-    if(best){
-      pos.x=best[0];
-      pos.y=best[1]
-    }
-    else{
-      if(!walk(pos.x,pos.y)){
-        for(let r=2;r<=24;r+=2){
-          let f=false;
-          for(let k=0;k<16;k++){
-            const q=k*Math.PI/8,
-            nx=pos.x+Math.cos(q)*r,
-            ny=pos.y+Math.sin(q)*r;
-            if(walk(nx,ny)){
-              pos.x=nx;
-              pos.y=ny;
-              f=true;
-              break
-            }
-          }
-          if(f)break
-        }
-      }
-      break
-    }
+    if(best){pos.x=best[0];pos.y=best[1]}
+    else break;
   }
 }
 let lastT=0;

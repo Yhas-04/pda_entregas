@@ -4,7 +4,10 @@
   --fg:#2b2118;
   --card:#fff;
   --bd:#e3d8c6;
-  --acc:#e8590c;
+  --acc:#e59a45;
+  --btn-bg:#fff8eb;
+  --btn-border:#ead7b8;
+  --btn-text:#604b35;
 }
 @media(prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -85,23 +88,29 @@ input{
 }
 button{
   flex:0 0 auto;
-  border:1px solid var(--bd);
-  background:var(--card);
-  color:var(--fg);
-  border-radius:6px;
+  border:1px solid var(--btn-border);
+  background:linear-gradient(180deg,#fffdf8 0%,var(--btn-bg) 100%);
+  color:var(--btn-text);
+  border-radius:11px;
   padding:9px 16px;
   cursor:pointer;
-  font:500 14px/1.4 system-ui,sans-serif;
+  font:600 14px/1.4 system-ui,sans-serif;
+  box-shadow:0 2px 0 rgba(112,82,47,.10),0 3px 9px rgba(112,82,47,.07);
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease;
 }
 button.on{
-  background:var(--acc);
-  color:#fff;
-  border-color:var(--acc);
+  background:linear-gradient(180deg,#ffe6bd 0%,#f7cc91 100%);
+  color:#68451f;
+  border-color:#e8bd80;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 2px 0 rgba(112,82,47,.12);
 }
-button:hover,input:focus{
-  border-color:var(--acc);
-  outline:none;
+button:hover{
+  border-color:#dcae70;
+  box-shadow:0 3px 0 rgba(112,82,47,.12),0 5px 12px rgba(112,82,47,.10);
+  transform:translateY(-1px);
 }
+button:active{transform:translateY(1px);box-shadow:0 1px 2px rgba(112,82,47,.10)}
+input:focus{border-color:var(--acc);outline:none}
 button:focus-visible{
   outline:2px solid var(--acc);
   outline-offset:2px;
